@@ -27,9 +27,10 @@ $intermediatestore.open([System.Security.Cryptography.X509Certificates.OpenFlags
 
 foreach($cert in $pfx) {
   $cert.FriendlyName = "<%= @friendlyname %>"
-	foreach($user in <%= usernames %>)
-  $Ar = New-Object  system.security.accesscontrol.filesystemaccessrule($user,"Read","Allow")
-  $cert.SetAccessControl($Ar)
+	foreach($user in <%= usernames %>) {
+		$Ar = New-Object  system.security.accesscontrol.filesystemaccessrule($user,"Read","Allow")
+		$cert.SetAccessControl($Ar)
+	}
   if($cert.Thumbprint -ne "<%= @thumbprint %>") {
       $intermediatestore.Add($cert)
   }
