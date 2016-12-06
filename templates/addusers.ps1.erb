@@ -1,0 +1,37 @@
+# $certCN is the identifiying CN for the certificate you wish to work with
+# The selection also sorts on Expiration date, just in case there are old expired certs still in the certificate store.
+#  Make sure we work with the most recent cert
+$certCN = "<%= @friendlyname %>"
+
+Try
+{
+$WorkingCert = Get-ChildItem CERT:\LocalMachine\My | where {$_.FriendlyName -match $certCN} | sort $_.NotAfter -Descending | select -first 1 -erroraction STOP
+$rsaFile = $WorkingCert.PrivateKey.CspKeyContainerInfo.UniqueKeyContainerName
+}
+Catch
+{
+"Error: unable to locate certificate for $($CertCN)"
+Exit
+}
+
+$keyPath = "C:\ProgramData\Microsoft\Crypto\RSA\MachineKeys\"
+$fullPath=$keyPath+$rsaFile
+$acl= (Get-Item $fullPath).GetAccessControl('Access')
+
+<%= @usernames.each do |user| %>
+$permission="<% user %>","Read","Allow"
+$accessRule=new-object System.Security.AccessControl.FileSystemAccessRule $permission
+$acl.AddAccessRule($accessRule)
+
+Try
+{
+Set-Acl $fullPath $acl
+"Success: ACL set on certificate"
+}
+Catch
+{
+"Error: unable to set ACL on certificate"
+Exit
+}
+}
+<% end %>

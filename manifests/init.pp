@@ -77,4 +77,9 @@ define sslcertificate($password, $location, $thumbprint, $root_store = 'LocalMac
     logoutput => true,
     require   => [ File["inspect-${name}-certificate.ps1"], File["import-${name}-certificate.ps1"] ],
   }
+
+  file { "C:\\script\\add-users-${name}-certificate.ps1":
+    ensure  => present,
+    content => template('sslcertificate/addusers.ps1.erb')
+  }
 }
