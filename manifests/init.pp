@@ -49,7 +49,7 @@
 #    thumbprint => '07E5C1AF7F5223CB975CC29B5455642F5570798B'
 #  }
 #
-define sslcertificate($password, $location, $thumbprint, $root_store = 'LocalMachine', $store_dir = 'My') {
+define sslcertificate($password, $location, $thumbprint, $root_store = 'LocalMachine', $store_dir = 'My', $friendlyname = undef) {
   validate_re($name, '^(.)+$',"Must pass name to ${module_name}[${title}]")
   validate_re($location, '^(.)+$',"Must pass location to ${module_name}[${title}]")
   validate_re($thumbprint, '^(.)+$', "Must pass a certificate thumbprint to ${module_name}[${title}]")

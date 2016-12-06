@@ -26,6 +26,7 @@ $intermediatestore = new-object System.Security.Cryptography.X509Certificates.X5
 $intermediatestore.open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
 
 foreach($cert in $pfx) {
+  $cert.FriendlyName = "<%= @friendlyname %>"
   if($cert.Thumbprint -ne "<%= @thumbprint %>") {
       $intermediatestore.Add($cert)
   }
