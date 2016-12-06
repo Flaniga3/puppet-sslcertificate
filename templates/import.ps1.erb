@@ -35,7 +35,7 @@ foreach($cert in $pfx) {
       $store.Add($cert)  
 			
 			#Add users
-			$users = "<%= usernames %>".Split(',')
+			$users = "<%= @usernames %>".Split(',')
 			foreach($user in $users) {
 			# $certCN is the identifiying CN for the certificate you wish to work with
 			# The selection also sorts on Expiration date, just in case there are old expired certs still in the certificate store.
